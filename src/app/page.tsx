@@ -173,49 +173,125 @@ export default function Home() {
 
   return (
     <main className="min-h-screen">
-      {/* Hero Section */}
-      <header className="relative overflow-hidden">
-        <div className="max-w-6xl mx-auto px-4 py-12 sm:py-16">
-          <div className="text-center">
-            {/* Emoji Decoration */}
-            <div className="text-5xl sm:text-6xl mb-4">🏖️</div>
-
-            {/* Title */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-orange-500 mb-4">
-              Alassio Juli 2026
-            </h1>
-
-            {/* Subtitle */}
-            <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto mb-6">
-              Übersicht aller Verfügbarkeiten
-            </p>
-
-            {/* CTA Button */}
-            <a
-              href="/eintragen"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-slate-900 font-bold rounded-full hover:from-amber-300 hover:to-orange-400 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-400/50 transition-all shadow-lg shadow-amber-500/25"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-              Neue Verfügbarkeit eintragen
-            </a>
+      {/* Mobile: Kalender zuerst */}
+      <div className="md:hidden">
+        {/* Mobile Header - Kompakt */}
+        <header className="sticky top-0 z-30 bg-slate-950/95 backdrop-blur-sm border-b border-slate-800">
+          <div className="px-4 py-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-orange-500">
+                  Alassio Juli 2026
+                </h1>
+                <p className="text-xs text-slate-400">
+                  {availabilities.length} {availabilities.length === 1 ? "Eintrag" : "Einträge"}
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Content */}
-      <div className="max-w-6xl mx-auto px-4 pb-16 space-y-12">
+        {/* Mobile Content - Kalender zuerst */}
+        <div className="px-4 py-4">
+          {isLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="flex flex-col items-center gap-4">
+                <div className="w-12 h-12 border-4 border-amber-400 border-t-transparent rounded-full animate-spin" />
+                <p className="text-slate-400">Lade Verfügbarkeiten...</p>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Monatsübersicht - Mobile */}
+              <section className="mb-8">
+                <AvailabilityTable availabilities={availabilities} />
+              </section>
+
+              {/* Einträge Liste - Mobile */}
+              <section className="mb-8">
+                <h2 className="text-xl font-bold text-white mb-4">
+                  👥 Alle Einträge
+                </h2>
+                <AvailabilityList
+                  availabilities={availabilities}
+                  onEdit={openEditModal}
+                  onDelete={handleDelete}
+                  isDeleting={deletingId}
+                />
+              </section>
+
+              {/* CTA Button - Mobile */}
+              <section className="mb-8 pb-8 border-b border-slate-800">
+                <a
+                  href="/eintragen"
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-amber-400 to-orange-500 text-slate-900 font-bold rounded-xl hover:from-amber-300 hover:to-orange-400 focus:outline-none focus:ring-4 focus:ring-amber-400/50 transition-all shadow-lg shadow-amber-500/25"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                  Neue Verfügbarkeit eintragen
+                </a>
+              </section>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Desktop: Original Layout */}
+      <div className="hidden md:block">
+        {/* Hero Section */}
+        <header className="relative overflow-hidden">
+          <div className="max-w-6xl mx-auto px-4 py-12 sm:py-16">
+            <div className="text-center">
+              {/* Emoji Decoration */}
+              <div className="text-5xl sm:text-6xl mb-4">🏖️</div>
+
+              {/* Title */}
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-orange-500 mb-4">
+                Alassio Juli 2026
+              </h1>
+
+              {/* Subtitle */}
+              <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto mb-6">
+                Übersicht aller Verfügbarkeiten
+              </p>
+
+              {/* CTA Button */}
+              <a
+                href="/eintragen"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-slate-900 font-bold rounded-full hover:from-amber-300 hover:to-orange-400 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-400/50 transition-all shadow-lg shadow-amber-500/25"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                Neue Verfügbarkeit eintragen
+              </a>
+            </div>
+          </div>
+        </header>
+
+        {/* Content */}
+        <div className="max-w-6xl mx-auto px-4 pb-16 space-y-12">
         {/* Loading State */}
         {isLoading ? (
           <div className="flex items-center justify-center py-20">
@@ -274,6 +350,7 @@ export default function Home() {
             </section>
           </>
         )}
+        </div>
       </div>
 
       {/* Footer */}

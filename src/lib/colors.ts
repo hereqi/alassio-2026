@@ -1,22 +1,22 @@
 /**
  * Deterministisch eine Farbe basierend auf dem Namen generieren
- * Nutzt einen einfachen Hash-Algorithmus
+ * Sehr unterschiedliche, kräftige Farben für maximale Unterscheidbarkeit
  */
 
-// Vordefinierte Tailwind-Farbklassen für gute Sichtbarkeit
+// Maximale Unterscheidbarkeit: Kontrastreiche, kräftige Farben
 const COLORS = [
-  { bg: "bg-rose-400", text: "text-rose-900", border: "border-rose-500" },
-  { bg: "bg-amber-400", text: "text-amber-900", border: "border-amber-500" },
-  { bg: "bg-emerald-400", text: "text-emerald-900", border: "border-emerald-500" },
-  { bg: "bg-cyan-400", text: "text-cyan-900", border: "border-cyan-500" },
-  { bg: "bg-violet-400", text: "text-violet-900", border: "border-violet-500" },
-  { bg: "bg-pink-400", text: "text-pink-900", border: "border-pink-500" },
-  { bg: "bg-lime-400", text: "text-lime-900", border: "border-lime-500" },
-  { bg: "bg-sky-400", text: "text-sky-900", border: "border-sky-500" },
-  { bg: "bg-orange-400", text: "text-orange-900", border: "border-orange-500" },
-  { bg: "bg-teal-400", text: "text-teal-900", border: "border-teal-500" },
-  { bg: "bg-indigo-400", text: "text-indigo-900", border: "border-indigo-500" },
-  { bg: "bg-fuchsia-400", text: "text-fuchsia-900", border: "border-fuchsia-500" },
+  { bg: "bg-red-500", text: "text-white", border: "border-red-600" },
+  { bg: "bg-blue-500", text: "text-white", border: "border-blue-600" },
+  { bg: "bg-green-500", text: "text-white", border: "border-green-600" },
+  { bg: "bg-yellow-400", text: "text-black", border: "border-yellow-500" },
+  { bg: "bg-purple-500", text: "text-white", border: "border-purple-600" },
+  { bg: "bg-orange-500", text: "text-white", border: "border-orange-600" },
+  { bg: "bg-pink-500", text: "text-white", border: "border-pink-600" },
+  { bg: "bg-cyan-400", text: "text-black", border: "border-cyan-500" },
+  { bg: "bg-lime-400", text: "text-black", border: "border-lime-500" },
+  { bg: "bg-indigo-500", text: "text-white", border: "border-indigo-600" },
+  { bg: "bg-rose-500", text: "text-white", border: "border-rose-600" },
+  { bg: "bg-teal-500", text: "text-white", border: "border-teal-600" },
 ];
 
 /**
@@ -32,20 +32,39 @@ function hashString(str: string): number {
   return Math.abs(hash);
 }
 
+// Cache für zugewiesene Farben (nach Reihenfolge)
+const assignedColors = new Map<string, number>();
+let nextColorIndex = 0;
+
 /**
  * Gibt die Farbklassen für einen Namen zurück
+ * Weist Farben in Reihenfolge zu für maximale Unterscheidbarkeit
  */
 export function getColorForName(name: string): {
   bg: string;
   text: string;
   border: string;
 } {
-  const index = hashString(name.toLowerCase()) % COLORS.length;
+  const key = name.toLowerCase().trim();
+  
+  if (!assignedColors.has(key)) {
+    assignedColors.set(key, nextColorIndex % COLORS.length);
+    nextColorIndex++;
+  }
+  
+  const index = assignedColors.get(key)!;
   return COLORS[index];
+}
+
+/**
+ * Reset der Farbzuweisung (für Tests)
+ */
+export function resetColors() {
+  assignedColors.clear();
+  nextColorIndex = 0;
 }
 
 /**
  * Alle verfügbaren Farben exportieren (für Legende etc.)
  */
 export { COLORS };
-

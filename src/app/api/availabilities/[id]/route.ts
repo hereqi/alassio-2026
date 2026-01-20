@@ -3,7 +3,7 @@ import {
   findAvailabilityById,
   updateAvailability,
   deleteAvailability,
-} from "@/lib/storage";
+} from "@/lib/db";
 import { validateAvailability } from "@/lib/utils";
 import { Availability, ApiResponse } from "@/lib/types";
 
@@ -123,4 +123,3 @@ export async function DELETE(
     );
   }
 }
-

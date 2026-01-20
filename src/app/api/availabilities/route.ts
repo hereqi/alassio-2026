@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
-import { readAvailabilities, addAvailability } from "@/lib/storage";
+import { getAvailabilities, addAvailability } from "@/lib/db";
 import { validateAvailability } from "@/lib/utils";
 import { Availability, ApiResponse } from "@/lib/types";
 
@@ -10,7 +10,7 @@ import { Availability, ApiResponse } from "@/lib/types";
  */
 export async function GET(): Promise<NextResponse<ApiResponse<Availability[]>>> {
   try {
-    const availabilities = await readAvailabilities();
+    const availabilities = await getAvailabilities();
     return NextResponse.json({ success: true, data: availabilities });
   } catch (error) {
     console.error("Fehler beim Laden der Verfügbarkeiten:", error);
@@ -64,4 +64,3 @@ export async function POST(
     );
   }
 }
-
